@@ -1,0 +1,20 @@
+#SPDX-License-Identifier: MIT-0
+---
+panel_launchers:
+  - { name: "mate-terminal",  exec: "/usr/bin/mate-terminal",   icon: "/opt/flatpak-icons/apps/scalable/terminal.svg",           position: 95 }
+  - { name: "sublime-text",  exec: "/usr/bin/subl",             icon: "/opt/flatpak-icons/apps/scalable/sublimetext.svg",        position: 105 }
+  - { name: "vscode",        exec: "/usr/bin/code",             icon: "/opt/flatpak-icons/apps/scalable/visual-studio-code.svg", position: 115 }
+  - { name: "firefox",       exec: "/usr/bin/firefox",          icon: "/opt/flatpak-icons/apps/scalable/firefox.svg",            position: 125 }
+  - { name: "brave-browser", exec: "/usr/bin/brave-browser",    icon: "/opt/flatpak-icons/apps/scalable/brave-browser.svg",      position: 135 }
+  - { name: "obsidian",      exec: "/usr/local/bin/obsidian",   icon: "/opt/flatpak-icons/apps/scalable/obsidian-icon.svg",      position: 145 }
+  - { name: "burp-suite",    exec: "/usr/bin/burpsuite",        icon: "/opt/flatpak-icons/apps/scalable/burp.svg",               position: 155 }
+  - { name: "flameshot",     exec: "/usr/bin/flameshot",        icon: "/opt/flatpak-icons/apps/scalable/flameshot.png",          position: 165 }
+
+panel_toplevel: "top"
+
+shortcut_name: "flameshot"
+shortcut_command: "flameshot gui"
+shortcut_binding: "<Alt>a"
+mac_shortcut_binding: "<Primary><Alt>a"
+new_slot: "custom6"
+new_path: "/org/mate/desktop/keybindings/{{ new_slot }}/"

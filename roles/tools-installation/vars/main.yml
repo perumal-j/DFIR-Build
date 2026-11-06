@@ -1,0 +1,49 @@
+---
+GitHubTools:
+  - name: mhtml-converter
+    url: "https://github.com/perumal-j/mhtml-converter"
+    destination: "/opt/mhtml-converter"
+
+
+UVtools:
+  - updog
+  - scrapy
+  - defaultcreds-cheat-sheet
+  - uploadserver
+  - wsgidav
+
+temp_bin_dir: "/tmp/uv-bin"
+target_bin_dir: "/usr/local/bin"
+
+temp_wsgi_dir: "/tmp/wsgidav-bin"
+
+PIPToolsGit:
+  - name: DonPAPI
+    url: "git+https://github.com/login-securite/DonPAPI"
+
+  - name: adidnsdump
+    url: "git+https://github.com/dirkjanm/adidnsdump#egg=adidnsdump"
+
+UVtoolsGit: 
+  - name: pwntools
+    url: "git+https://github.com/Gallopsled/pwntools"
+
+
+repositories: 
+  - name: targetedKerberoast
+    url: "https://github.com/ShutdownRepo/targetedKerberoast"
+    destination: "/tmp/targetedKerberoast"
+
+
+GitHubReleases:
+  - repo: "WithSecureLabs/chainsaw"
+    regex: "chainsaw_all_"
+    destination: "/opt/chainsaw"
+
+  - repo: "trustedsec/DitExplorer"
+    regex: "DitExplorer"
+    destination: "/opt/ditexplorer"
+
+  - repo: "ufrisk/MemProcFS"
+    regex: "linux_x64"
+    destination: "/opt/memprocfs"

@@ -1,0 +1,7 @@
+#SPDX-License-Identifier: MIT-0
+---
+# vars file for docker-bloodhound
+bloodhound_admin_email: "admin@bloodhound.com"
+
+temp_bin_dir: "/tmp/bloodhound-bin"
+target_bin_dir: "/usr/local/bin"

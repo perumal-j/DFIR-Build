@@ -1,0 +1,83 @@
+---
+- name: "Check of the presence of /opt/flatpak-icons"
+  stat:
+    path: "/opt/flatpak-icons"
+  register: flat_remix
+  changed_when: false
+
+- name: "Clone icon repo"
+  git:
+    repo: https://github.com/perumal-j/flatpak-icons.git
+    dest: /opt/flatpak-icons
+  become: true
+  when: not flat_remix.stat.exists
+
+- name: "Modifying flat-remix Directory Owner"
+  file:
+    path: "/opt/flatpak-icons"
+    owner: "{{ ansible_facts['env']['USER'] }}"
+    group: "{{ ansible_facts['env']['USER'] }}"
+    state: directory
+    recurse: true
+  become: true
+  changed_when: false
+
+- name: "Create .desktop launchers"
+  template:
+    src: launchers.j2
+    dest: "{{ ansible_facts['env']['HOME'] }}/.local/share/applications/{{ item.name }}.desktop"
+    mode: "0755"
+  loop: "{{ panel_launchers }}"
+
+- name: "Update desktop database"
+  command: update-desktop-database {{ ansible_facts['env']['HOME'] }}/.local/share/applications
+  changed_when: false
+
+# ---- MATE panel (dconf) ----
+- name: "Read current panel object list"
+  command: dconf read /org/mate/panel/general/object-id-list
+  register: panel_ids_raw
+  changed_when: false
+
+- name: "Compute new object list"
+  set_fact:
+    panel_ids_new: >-
+      {{ (panel_ids_raw.stdout | from_yaml)
+         | union(panel_launchers | map(attribute='name') | map('regex_replace', '^', 'launcher-') | list) }}
+
+- name: "Set launcher object-type"
+  dconf:
+    key: "/org/mate/panel/objects/launcher-{{ item.name }}/object-type"
+    value: "'launcher'"
+  loop: "{{ panel_launchers }}"
+
+- name: Set launcher-location
+  dconf:
+    key: "/org/mate/panel/objects/launcher-{{ item.name }}/launcher-location"
+    value: "'{{ ansible_facts['env']['HOME'] }}/.local/share/applications/{{ item.name }}.desktop'"
+  loop: "{{ panel_launchers }}"
+
+- name: Set toplevel-id
+  dconf:
+    key: "/org/mate/panel/objects/launcher-{{ item.name }}/toplevel-id"
+    value: "'{{ panel_toplevel }}'"
+  loop: "{{ panel_launchers }}"
+
+- name: Set position
+  dconf:
+    key: "/org/mate/panel/objects/launcher-{{ item.name }}/position"
+    value: "{{ item.position }}"
+  loop: "{{ panel_launchers }}"
+
+- name: Register launchers in object-id-list
+  dconf:
+    key: /org/mate/panel/general/object-id-list
+    value: "{{ panel_ids_new }}"
+
+- name: Restart panel (session respawns it)
+  command: killall mate-panel
+  failed_when: false
+  changed_when: true
+
+
+
